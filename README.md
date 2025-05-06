@@ -56,6 +56,23 @@ Desviación estándar: 25.4015 V
 
 PRE-PROCESAMIENTO DE LA SEÑAL 
 
+Tipo de filtro: Butterworth pasa banda.
+Se selecciona un filtro Butterworth por su respuesta en frecuencia suave y sin ondulaciones, ideal para señales biológicas donde se requiere preservación de la forma de la onda ECG.
+
+Parámetros del filtro:
+
+Frecuencia de muestreo (fs): calculada a partir del tiempo de adquisición.
+
+Frecuencia de corte baja: 0.5 Hz (para eliminar tendencia de baja frecuencia y componente DC).
+
+Frecuencia de corte alta: 40 Hz (para eliminar ruido muscular (EMG) y artefactos de alta frecuencia).
+
+Orden del filtro: 4 (suficiente para buena pendiente de atenuación sin hacer inestable el filtro).
+
+Fórmulas utilizadas:
+
+Frecuencias normalizadas:
+
 ![image](https://github.com/user-attachments/assets/8b322acb-d16a-4bde-82da-a6ecaf320b82)
 
 

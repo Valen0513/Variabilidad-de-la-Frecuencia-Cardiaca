@@ -56,6 +56,8 @@ Desviación estándar: 25.4015 V
 
 PRE-PROCESAMIENTO DE LA SEÑAL 
 
+la implementación con condiciones iniciales en cero.
+
 Tipo de filtro: Butterworth pasa banda.
 Se selecciona un filtro Butterworth por su respuesta en frecuencia suave y sin ondulaciones, ideal para señales biológicas donde se requiere preservación de la forma de la onda ECG.
 
@@ -69,9 +71,45 @@ Frecuencia de corte alta: 40 Hz (para eliminar ruido muscular (EMG) y artefactos
 
 Orden del filtro: 4 (suficiente para buena pendiente de atenuación sin hacer inestable el filtro).
 
-Fórmulas utilizadas:
+Fórmulas utilizadas: valores normalizados de las frecuencias de corte baja y alta, Porque muchos métodos de diseño de filtros en Python esperan frecuencias normalizadas en el rango de 0 a 1, donde 1 representa la frecuencia de Nyquist.
 
-Frecuencias normalizadas:
+low=flowcut/fNysquit
+
+high=fhighcut/fNysquit
+
+Donde:𝑓nyquist=𝑓𝑠/2
+
+El filtro IIR de orden 𝑁 se implementa mediante la siguiente ecuación en diferencias:
+
+y[n]=-∑_(k=1)^N▒〖aky[n-k]+∑_(k=0)^N▒〖bkx[n-k]〗〗
+
+  son los coeficientes del filtro calculados previamente.
+
+En la práctica, para un filtro Butterworth de orden 4:
+
+Tendrás 5 coeficientes 
+𝑏
+b y 5 coeficientes 
+𝑎
+a.
+
+Implementación asumiendo condiciones iniciales en 0 (es decir, 
+𝑦
+[
+−
+1
+]
+=
+𝑦
+[
+−
+2
+]
+=
+⋯
+=
+0
+y[−1]=y[−2]=⋯=0).
 
 ![image](https://github.com/user-attachments/assets/8b322acb-d16a-4bde-82da-a6ecaf320b82)
 

@@ -81,38 +81,114 @@ Donde:𝑓nyquist=𝑓𝑠/2
 
 El filtro IIR de orden 𝑁 se implementa mediante la siguiente ecuación en diferencias:
 
-y[n]=-∑_(k=1)^N▒〖aky[n-k]+∑_(k=0)^N▒〖bkx[n-k]〗〗
+![image](https://github.com/user-attachments/assets/48e73b6b-cb4c-4050-a946-12f41e58e4a5)
 
-  son los coeficientes del filtro calculados previamente.
+donde:
 
-En la práctica, para un filtro Butterworth de orden 4:
+y[n] es la salida filtrada en el instante n,
 
-Tendrás 5 coeficientes 
-𝑏
-b y 5 coeficientes 
-𝑎
-a.
+x[n] es la entrada en el instante n,
 
-Implementación asumiendo condiciones iniciales en 0 (es decir, 
-𝑦
-[
-−
-1
-]
-=
-𝑦
-[
-−
-2
-]
-=
-⋯
-=
-0
-y[−1]=y[−2]=⋯=0).
+𝑎𝑘 y 𝑏𝑘 son los coeficientes del filtro calculados previamente.
 
 ![image](https://github.com/user-attachments/assets/8b322acb-d16a-4bde-82da-a6ecaf320b82)
 
+![image](https://github.com/user-attachments/assets/d11ebf49-4699-4824-889c-b2173d63483a)
+
+
+Resultados:
+ Coeficientes del filtro:
+b = [ 0.00462052  0.         -0.01848209  0.          0.02772313  0.
+ -0.01848209  0.          0.00462052]
+a = [  1.          -6.37351272  17.82658688 -28.63910936  28.95397956
+ -18.88197531   7.75812255  -1.83562278   0.19153118]
+
+ Ecuacioón en diferencias 
+
+  y[n]=  6.3735⋅y[n−1]−17.8266⋅y[n−2]+28.6391⋅y[n−3]−28.9540⋅y[n−4]
++18.8820⋅y[n−5]−7.7581⋅y[n−6]+1.8356⋅y[n−7]−0.1915⋅y[n−8]
++0.0046⋅x[n]−0.0185⋅x[n−2]+0.0277⋅x[n−4]−0.0185⋅x[n−6]+0.0046⋅x[n−8]
+
+y[n]=3.7605y[n−1]−5.3150y[n−2]+3.3695y[n−3]−0.8187y[n−4]
++0.0048x[n]−0.0096x[n−2]+0.0048x[n−4]
+​
+Análisis de la HRV en el dominio del tiempo
+
+La Variabilidad de la Frecuencia Cardíaca (HRV) es una medida de las variaciones en los intervalos de tiempo entre latidos cardíacos consecutivos, conocidos como intervalos R-R, obtenidos de una señal ECG. Un análisis en el dominio del tiempo proporciona información sobre el control autónomo del corazón, reflejando la actividad simpática y parasimpática.
+
+Detección de picos R: Se aplicó un umbral adaptativo:
+
+umbral=𝜇+0.3⋅𝜎
+
+Donde 
+
+μ y σ son la media y la desviación estándar del ECG filtrado. Se usó find_peaks con una distancia mínima entre picos para asegurar que se correspondan con latidos reales (aprox. ≥0.4s, lo que evita detectar picos falsos en intervalos cortos).
+
+Cálculo de Intervalos R-R: Se calcularon con:
+
+𝑅𝑅𝑖=𝑡(𝑅𝑖+1)−𝑡(𝑅𝑖)
+ 
+Primeros 5 intervalos detectados:
+[0.687, 1.075, 1.095, 1.012, 1.002] s
+
+Frecuencia Cardíaca Promedio
+
+FC promedio=60/mean(𝑅𝑅)=600/0.7277≈82.45 bpmFC 
+
+Esto representa una frecuencia cardíaca normal en reposo.
+
+Mean RR indica un ritmo cardíaco normal (≈ 82 bpm).
+
+SDNN es relativamente alta, lo que sugiere buena capacidad de adaptación del sistema nervioso autónomo.
+
+RMSSD y pNN50 son elevados, lo cual refleja una alta actividad parasimpática, característica de un individuo con buena recuperación y bajo estrés.
+
+Estos valores son coherentes entre sí, sin inconsistencias numéricas, lo que valida la calidad del análisis.
+
+Resultados: 
+
+Intervalos R-R (primeros 5): [0.68744271 1.07491042 1.09490876 1.01241563 1.00241647] segundos
+
+Frecuencia cardíaca promedio: 82.45 bpm
+
+Primeros 5 intervalos R-R (s): [0.68744271 1.07491042 1.09490876 1.01241563 1.00241647]
+Primeros 5 tiempos de R-R: [0.37121907 1.25239563 2.33730522 3.39096742 4.39838347]
+
+--- PARÁMETROS DE HRV EN DOMINIO DEL TIEMPO ---
+Mean RR: 0.7277 s
+SDNN: 0.1556 s
+RMSSD: 0.1219 s
+NN50: 200
+pNN50: 48.66 %
+
+![image](https://github.com/user-attachments/assets/17e8d245-1a74-430b-905c-6287c8cd4708)
+
+Los valores del intervalo R-R oscilan aproximadamente entre 0.45 s y 1.15 s, lo cual sugiere que la frecuencia cardíaca varió entre unos 52 y 133 latidos por minuto (bpm). Se observa una tendencia en U: Al principio los intervalos son altos (latidos más espaciados → menor FC). Luego los intervalos disminuyen (aumento de la FC). Finalmente, los intervalos vuelven a subir (disminución de la FC).
+
+![image](https://github.com/user-attachments/assets/44c6034b-532e-4897-8875-c15ca8f9da04)
+
+Se observa una frecuencia cardíaca que varía entre ~55 bpm y más de 140 bpm. La forma general también tiene una tendencia en U invertida: aumento de la frecuencia hacia la mitad del registro y disminución al final. Hay picos súbitos, especialmente uno muy alto (>140 bpm), que podría deberse a: Un artefacto de señal Un error en la detección de un R O un latido prematuro que acortó transitoriamente el intervalo R-R.
+
+Aplicación de transformada Wavelet
+
+Transformada Wavelet Continua (CWT) con PyWavelets (pywt)
+Usamos la wavelet 'cmor' (Complejo Morlet), ideal para análisis tiempo-frecuencia de señales fisiológicas
+Aplicamos sobre la nueva señal de HRV (serie de intervalos R-R vs tiempo)
+
+El espectrograma revela una señal HRV con predominio claro y sostenido en la banda LF y escasa presencia en HF, lo cual se interpreta como una activación simpática prolongada y una supresión de la actividad parasimpática. Este patrón podría estar asociado con una situación de estrés prolongado, ansiedad, exigencia cognitiva o emocional, aunque sin más contexto clínico no se puede confirmar la causa exacta.
+
+Desde el punto de vista fisiológico, estos resultados indican un desequilibrio autonómico que se aleja del tono vagal saludable observado en condiciones de reposo. La falta de oscilaciones en HF, junto con la presencia constante en LF, sugiere una respuesta del sistema nervioso autónomo orientada al estado de alerta o defensa.
+
+![image](https://github.com/user-attachments/assets/2f521a08-5367-409d-9e71-5f80cacf6908)
+
+![image](https://github.com/user-attachments/assets/392d6ac4-762a-47b3-b3ed-42fa94548f61)
+
+En el espectrograma se observa que la potencia está mayormente concentrada por debajo de los 0.15 Hz, especialmente entre 0.04 y 0.1 Hz, lo cual se representa con colores cálidos (amarillo y rojo) en los primeros segundos y hacia el final del registro. La franja correspondiente a frecuencias superiores a 0.15 Hz permanece en azul oscuro, lo que indica una potencia muy baja o nula en la banda HF. Esta distribución espectral refleja una dominancia simpática durante todo el registro, sin evidencias claras de actividad parasimpática ni de oscilaciones asociadas a la respiración, lo cual sugiere un estado fisiológico de activación constante.
+
+
+ 
+
+​
 
 
 

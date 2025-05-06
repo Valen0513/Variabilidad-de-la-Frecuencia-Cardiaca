@@ -1,4 +1,7 @@
 # Variabilidad-de-la-Frecuencia-Cardiaca
+
+FUNDAMENTOS TEORICOS
+
 Sistema Nervioso Autónomo (SNA)
 
 -Actividad simpática: acelera la frecuencia cardíaca (respuesta a estrés).
@@ -16,4 +19,45 @@ Transformada Wavelet
 -Herramienta de análisis tiempo-frecuencia para señales no estacionarias.
 -Permite observar cómo cambia la potencia de ciertas frecuencias (LF, HF) a lo largo del tiempo.
 -Wavelets adecuadas para biológicas: Morlet, Mexican Hat, Daubechies.
+
+ADQUISICION DE LA SEÑAL
+
+Se cargó la señal de ECG desde un archivo de texto plano (LINA2.txt) usando la función np.loadtxt, especificando que los valores están separados por comas. El archivo contiene únicamente los valores de voltaje adquiridos durante un experimento de 300 segundos de duración.
+
+A partir del número total de muestras (num_muestras), se generó un vector de tiempo equiespaciado con np.linspace, que va desde 0 hasta 300 segundos. Esto permitió relacionar cada muestra con su instante de adquisición.
+
+La frecuencia de muestreo efectiva fue estimada con la fórmula:
+
+Fs=(numero de muestras)/(duración total)=N/T
+ 
+lo que garantiza que el eje temporal y la señal estén correctamente sincronizados para su análisis.
+
+Finalmente, se graficó la señal cruda en función del tiempo. Esta gráfica permite observar visualmente la forma de onda de la señal original antes de cualquier tipo de procesamiento, facilitando la identificación de posibles artefactos, ruido o pérdidas de información.
+
+![image](https://github.com/user-attachments/assets/66be4a2f-a382-4b16-8119-93f85b387333)
+
+Resultados: 
+
+El numero ed muestras es:  120011
+
+Tiempo final es:  300.0 segundos
+
+La frecuencia de muestreo es:  400.0366666666667 Hz
+
+--- Estadísticos de la señal cruda ---
+
+Voltaje mínimo: 4.0000 V
+
+Voltaje máximo: 246.0000 V
+
+Media: 120.7679 V
+
+Desviación estándar: 25.4015 V
+
+PRE-PROCESAMIENTO DE LA SEÑAL 
+
+![image](https://github.com/user-attachments/assets/8b322acb-d16a-4bde-82da-a6ecaf320b82)
+
+
+
 
